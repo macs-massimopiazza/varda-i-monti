@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>CAM_NATIVE_HUB</title>
+    <meta name="apple-mobile-web-app-title" content="CamsHub">
+    <link rel="apple-touch-icon" href="https://via.placeholder.com/180x180/000000/ffffff?text=C">
+
+    <title>CAMS_NATIVE_HUB</title>
     <style>
         :root {
             --google-blue: #4285f4;
@@ -21,11 +26,11 @@
             font-family: -apple-system, system-ui, sans-serif;
             background: #fff;
             padding: calc(var(--safe-top) + 20px) 16px 20px 16px;
+            user-select: none;
         }
 
         h1 { font-size: 24px; font-weight: 900; text-transform: uppercase; margin-bottom: 24px; border-bottom: 4px solid var(--brutal-black); display: inline-block; }
 
-        /* Griglia principale */
         .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -52,7 +57,6 @@
 
         .card-name { font-weight: 800; font-size: 14px; text-transform: uppercase; }
 
-        /* Overlay Fullscreen */
         #app-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -85,28 +89,25 @@
             text-transform: uppercase;
         }
 
-        /* Container del Frame con FIX per Mobile Rendering */
         .frame-wrapper {
             flex-grow: 1;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            position: relative;
             background: #000;
+            -webkit-overflow-scrolling: touch; /* Fluidità scroll su iOS */
         }
 
         #webcam-frame {
             width: 100%;
             height: 100%;
             border: none;
-            /* Forza il rendering mobile ignorando i tentativi di caricamento desktop */
-            display: block;
         }
     </style>
 </head>
 <body>
 
-<h1>Cams_Index</h1>
+<h1>webcams</h1>
 
 <div class="grid" id="mainGrid"></div>
 
@@ -121,6 +122,11 @@
 </div>
 
 <script>
+    // Registrazione Service Worker per PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js');
+    }
+
     const data = [
         { nome: "Alpe Lusia", url: "https://www.alpelusia.it/it/inverno/webcam" },
         { nome: "San Giorgio", url: "https://www.altalessinia.it/webcam/" },
@@ -154,6 +160,5 @@
         }, 400);
     }
 </script>
-
 </body>
 </html>

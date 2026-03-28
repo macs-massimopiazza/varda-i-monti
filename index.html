@@ -102,6 +102,7 @@
             width: 100%;
             height: 100%;
             border: none;
+            -webkit-overflow-scrolling: touch;
         }
     </style>
 </head>
@@ -117,7 +118,12 @@
         <button class="close-btn" onclick="closeCam()">Chiudi</button>
     </div>
     <div class="frame-wrapper">
-        <iframe id="webcam-frame" src="" sandbox="allow-forms allow-scripts allow-same-origin" allowfullscreen></iframe>
+        <iframe 
+          id="webcam-frame" 
+          src="" 
+          sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox" 
+          allowfullscreen>
+        ></iframe>
     </div>
 </div>
 

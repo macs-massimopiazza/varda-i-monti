@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>CAM_NATIVE_HUB</title>
+    <style>
+        :root {
+            --google-blue: #4285f4;
+            --brutal-black: #000;
+            --bg-gray: #f8f9fa;
+            --safe-top: env(safe-area-inset-top);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, system-ui, sans-serif;
+            background: #fff;
+            padding: calc(var(--safe-top) + 20px) 16px 20px 16px;
+        }
+
+        h1 { font-size: 24px; font-weight: 900; text-transform: uppercase; margin-bottom: 24px; border-bottom: 4px solid var(--brutal-black); display: inline-block; }
+
+        /* Griglia principale */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .card {
+            border: 3px solid var(--brutal-black);
+            background: var(--bg-gray);
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 4px 4px 0px var(--brutal-black);
+        }
+
+        .card:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px var(--brutal-black);
+        }
+
+        .card-name { font-weight: 800; font-size: 14px; text-transform: uppercase; }
+
+        /* Overlay Fullscreen */
+        #app-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #fff;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #app-overlay.active { display: flex; transform: translateY(0); }
+
+        .nav-bar {
+            padding: var(--safe-top) 16px 15px 16px;
+            background: #fff;
+            border-bottom: 3px solid var(--brutal-black);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: var(--brutal-black);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        /* Container del Frame con FIX per Mobile Rendering */
+        .frame-wrapper {
+            flex-grow: 1;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
+
+        #webcam-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            /* Forza il rendering mobile ignorando i tentativi di caricamento desktop */
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Cams_Index</h1>
+
+<div class="grid" id="mainGrid"></div>
+
+<div id="app-overlay">
+    <div class="nav-bar">
+        <span id="overlay-title" style="font-weight: 800;">CAM_NAME</span>
+        <button class="close-btn" onclick="closeCam()">Chiudi</button>
+    </div>
+    <div class="frame-wrapper">
+        <iframe id="webcam-frame" src="" sandbox="allow-forms allow-scripts allow-same-origin" allowfullscreen></iframe>
+    </div>
+</div>
+
+<script>
+    const data = [
+        { nome: "Alpe Lusia", url: "https://www.alpelusia.it/it/inverno/webcam" },
+        { nome: "San Giorgio", url: "https://www.altalessinia.it/webcam/" },
+    ];
+
+    const grid = document.getElementById('mainGrid');
+    const overlay = document.getElementById('app-overlay');
+    const iframe = document.getElementById('webcam-frame');
+    const title = document.getElementById('overlay-title');
+
+    data.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<div class="card-name">${item.nome}</div>`;
+        card.onclick = () => openCam(item);
+        grid.appendChild(card);
+    });
+
+    function openCam(item) {
+        title.innerText = item.nome.toUpperCase();
+        iframe.src = item.url;
+        overlay.style.display = 'flex';
+        setTimeout(() => overlay.classList.add('active'), 10);
+    }
+
+    function closeCam() {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            iframe.src = '';
+        }, 400);
+    }
+</script>
+
+</body>
+</html>
